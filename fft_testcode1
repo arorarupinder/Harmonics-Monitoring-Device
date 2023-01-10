@@ -4,10 +4,12 @@ from numpy.fft import fft, ifft
 import matplotlib.pyplot as plot #plot is the object 
 import numpy as np #np is inputted as object
 
-# Sampling rate 10240 hz / second
+# Sampling rate 1024 hz / second
 t = np.linspace(0, 10, 1024, endpoint=True) #np is the object and linspace is the function
-
 print(t)
+#Normalizing t
+z= np.zeros(len(t))
+print(z)
 
 # Plot the square wave signal
 y=signal.square(2 * np.pi * 0.1 * t) #t is the input time array, duty cycle= 50%
@@ -16,7 +18,7 @@ plot.plot(t, y)
 print(y)
 
 # Give a title for the square wave plot
-plot.title('Sqaure wave - 5 Hz sampled at 1000 Hz /second')
+plot.title('Sqaure wave - 5 Hz sampled at 1024 Hz /second')
 
 # Give x axis label for the square wave plot
 plot.xlabel('Time')
@@ -42,7 +44,6 @@ T = N/1024 #length of y/ sample rate
 freq = n/T #array length of y/ (length of y/ sample rate) = frequency
 
 plt.figure(figsize = (12, 6)) #size of fft graph
-#plt.figure(figsize = (24, 12))
 plt.subplot(121)
 
 
@@ -52,11 +53,4 @@ plt.xlabel('Freq (Hz)')
 plt.ylabel('FFT Amplitude |X(freq)|')
 plt.xlim(0, 10)
 
-plt.subplot(122)
-plt.plot(t, ifft(X), 'r')
-plt.xlabel('Time (s)')
-plt.ylabel('Amplitude')
-plt.tight_layout()
 plt.show()
-
-#EDITS
