@@ -26,3 +26,5 @@ b = np.fft.fft(t)
 b_mag = np.abs(b)
 print(b)
 print(b_mag)
+
+#Plot FFT
