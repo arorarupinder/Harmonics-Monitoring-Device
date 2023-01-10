@@ -18,7 +18,7 @@ plot.plot(t, y)
 print(y)
 
 # Give a title for the square wave plot
-plot.title('Sqaure wave - 5 Hz sampled at 1024 Hz /second')
+plot.title('Sqaure wave - 0.1 Hz sampled at 1024 Hz /second')
 
 # Give x axis label for the square wave plot
 plot.xlabel('Time')
