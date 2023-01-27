@@ -1,0 +1,10 @@
+import machine
+import utime
+ 
+analog_value = machine.ADC(28) #defining ADC input at pin28
+conversion_factor = 3.3/ (65535) #conversion factor which is dividing the max input voltage with max sample rate
+
+while True: #infinite loop
+    reading = analog_value.read_u16()     #reading ADC val
+    print("voltage val: ",reading * conversion_factor) #print value to shell monitor
+    utime.sleep(0.2)
