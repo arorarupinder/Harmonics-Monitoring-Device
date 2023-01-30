@@ -2,12 +2,34 @@
 from ulab import numpy as np
 import sys
 import machine 
-import time
+import utime
 
+@micropython.native
+def read_adc():
+    # initialize the ADC
+    adc = machine.ADC(28)
 
+    # set the number of samples to be taken
+    adc_values = np.zeros(1024)
+
+    #read ADC and store them in an array
+    for i in range(1024):
+        adc_values[i] = adc.read_u16()
+        utime.sleep(0.1)
+        
+    return adc_values
+
+#call the function now 
+adc_values = read_adc()
+
+#print the array
+print(adc_values)
+
+# create a square wave
+y = np.where(np.sin(2 * np.pi * 0.1 * adc_values) < 0, -1, 1)
 
 #normalize array
-z = np.zeros(len(x))
+z = np.zeros(len(adc_values))
 
 #perform fft
 a, b= np.fft.fft(y, z)
@@ -57,12 +79,3 @@ with open("fft.csv", "w") as f:
 
 # Close the file
 f.close()
-        
-# initialize the SPI connection
-#spi = machine.SPI(1, baudrate=1000000, polarity=0, phase=0)
-
-# convert the string to bytes
-#string_bytes = csv_str.encode()
-
-# send the string over SPI
-#spi.write(string_bytes)
