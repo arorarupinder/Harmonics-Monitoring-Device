@@ -1,0 +1,15 @@
+import time
+
+#@micropython.native
+def add():
+    j = 100000
+    a = 0
+    for i in range(j):
+        a = a+i
+    return a
+    
+t1 = time.ticks_ms()
+x = add()
+t2 = time.ticks_ms() - t1
+print(x)
+print(t2)
