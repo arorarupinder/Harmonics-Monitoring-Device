@@ -19,3 +19,39 @@ def read_adc():
         utime.sleep(0.1)
         
     return adc_values
+
+def choose_best_adc_input():
+    # initialize the ADC for the first input
+    adc1 = machine.ADC(26)
+
+    # initialize the ADC for the second input
+    adc2 = machine.ADC(27)
+
+    # initialize the ADC for the third input
+    adc3 = machine.ADC(28)
+
+    # set the target voltage
+    target_voltage = 3.3
+
+    # set the number of samples to be taken
+    n_samples = 1024
+
+    # read ADC inputs and store them in arrays
+    adc1_values = np.zeros(n_samples)
+    adc2_values = np.zeros(n_samples)
+    adc3_values = np.zeros(n_samples)
+    for i in range(n_samples):
+        adc1_values[i] = adc1.read_u16()
+        adc2_values[i] = adc2.read_u16()
+        adc3_values[i] = adc3.read_u16()
+
+    # calculate the mean voltage of each ADC input
+    adc1_mean = np.mean(adc1_values) / 65535 * 3.3
+    adc2_mean = np.mean(adc2_values) / 65535 * 3.3
+    adc3_mean = np.mean(adc3_values) / 65535 * 3.3
+
+    # find the ADC input with the closest mean voltage to the target voltage
+    adc_deltas = [abs(target_voltage - adc1_mean), abs(target_voltage - adc2_mean), abs(target_voltage - adc3_mean)]
+    best_adc_input = np.argmin(adc_deltas) + 1
+
+    return best_adc_input
