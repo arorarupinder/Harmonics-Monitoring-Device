@@ -1,12 +1,12 @@
 def read_adc():
     # initialize the ADC for the first input
-    adc1 = machine.ADC(28)
+    adc1 = machine.ADC(26)
 
     # initialize the ADC for the second input
-    adc2 = machine.ADC(29)
+    adc2 = machine.ADC(27)
 
     # initialize the ADC for the third input
-    adc3 = machine.ADC(30)
+    adc3 = machine.ADC(28)
 
     # set the number of samples to be taken
     adc_values = np.zeros((1024, 3))
