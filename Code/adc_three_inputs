@@ -1,0 +1,21 @@
+def read_adc():
+    # initialize the ADC for the first input
+    adc1 = machine.ADC(28)
+
+    # initialize the ADC for the second input
+    adc2 = machine.ADC(29)
+
+    # initialize the ADC for the third input
+    adc3 = machine.ADC(30)
+
+    # set the number of samples to be taken
+    adc_values = np.zeros((1024, 3))
+
+    # read ADC inputs and store them in an array
+    for i in range(1024):
+        adc_values[i, 0] = adc1.read_u16()
+        adc_values[i, 1] = adc2.read_u16()
+        adc_values[i, 2] = adc3.read_u16()
+        utime.sleep(0.1)
+        
+    return adc_values
