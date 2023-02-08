@@ -1,0 +1,16 @@
+#Slave code
+import machine
+
+#Configure pins
+spi_sck = machine.Pin(2)
+spi_tx = machine.Pin(3)
+spi_rx = machine.Pin(4)
+
+#Configure SPI bus as slave
+spi = machine.SPI(0, baudrate = 100000, polarity = 0, phase = 0)
+spi.init(baudrate = 100000, polarity = 0, phase = 0)
+
+#Write data to be read by the master
+data = bytearray([1,2,3,4])
+spi.write(data)
+print(data)
