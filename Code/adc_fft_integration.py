@@ -10,11 +10,15 @@ def read_adc():
 
     # set the number of samples to be taken
     adc_values = np.zeros(1024)
+    
+    # Calculate the time between samples
+    sample_time = 1 / 1080
 
     #read ADC and store them in an array
     for i in range(1024):
         adc_values[i] = adc.read_u16()
-        utime.sleep(0.1)
+        #1080 samples per second 
+        utime.sleep(sample_time)
         
     return adc_values
 
