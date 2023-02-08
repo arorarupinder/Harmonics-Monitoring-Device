@@ -7,7 +7,7 @@ spi_tx = machine.Pin(3)
 spi_rx = machine.Pin(4)
 
 #Configure SPI bus as slave
-spi = machine.SPI(0, baudrate = 100000, polarity = 0, phase = 0)
+spi = machine.SPI(0, baudrate = 100000, polarity = 0, phase = 0, sck = spi_sck, mosi = spi_tx, miso = spi_rx)
 spi.init(baudrate = 100000, polarity = 0, phase = 0)
 
 #Write data to be read by the master
