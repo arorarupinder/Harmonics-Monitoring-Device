@@ -1,0 +1,36 @@
+#Master code
+import machine
+
+#Configure pins
+spi_sck=machine.Pin(2)
+spi_tx=machine.Pin(3)
+spi_rx=machine.Pin(4)
+
+# Configure SPI bus as master
+spi=machine.SPI(0,baudrate=100000,polarity=0, phase=0, sck=spi_sck, mosi=spi_tx, miso=spi_rx)
+spi.init(baudrate=100000, polarity=0, phase=0)
+
+
+# Slave Select Pin for each slave
+slave = machine.Pin(0)
+
+# Function to read data from the slave
+def read_slave():
+    # Select the slave
+    slave.high()
+    slave.low()
+
+    # Read data from the slave
+    data = bytearray(4)
+    spi.readinto(data)
+
+    # Deselect the slave
+    slave.high()
+
+    return data
+
+# Read data from the slave
+data = read_slave()
+print(data)
+
+# Store data in memory for further processing
