@@ -1,0 +1,22 @@
+from machine import Pin
+
+button_pin = Pin(16, Pin.IN, Pin.PULL_UP)
+direction_pin = Pin(17, Pin.IN, Pin.PULL_UP) #help identify which direction the knob is being turned in
+step_pin = Pin(18, Pin.IN, Pin.PULL_UP) #help identify which direction the knob is being turned in
+
+previous_value = True
+button_down = False #part of debouncing
+
+while True:
+    if previous_value != step_pin.value():
+        if step_pin.value() == False:
+            if direction_pin.value() == False:
+                print("turn left")
+            else:
+                print("turn right")
+        previous_value = step_pin.value()
+    if button_pin.value() == False and not button_down:
+        print ("button pushed")
+        button_down = True
+    if button_pin.value() == True and button_down:
+        button_down = False
