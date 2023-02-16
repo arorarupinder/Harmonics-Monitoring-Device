@@ -1,0 +1,15 @@
+# central reads data
+
+from easy_comms import Easy_comms
+from machine import Pin
+import json
+
+com1 = Easy_comms(0, 9600)
+led = Pin(25, Pin.OUT)
+
+while True:
+    message = com1.read()
+    if message is not None:
+        data = json.loads(message)
+        led.toggle()
+        print(data)
