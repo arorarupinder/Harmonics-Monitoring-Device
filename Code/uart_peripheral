@@ -5,16 +5,10 @@ from time import sleep
 from machine import Pin
 import json
 
-command = {'command':'blink', 'args': 'on'}
-
 com1 = Easy_comms(0,9600)
 led = Pin(25, Pin.OUT)
-
+data = [1,2,3,4,5]
 while True:
-    com1.send(str(json.dumps(command)))
-    if command['args'] == 'on':
-       command = {'command':'blink', 'args': 'off'}
-    else:
-       command = {'command':'blink', 'args': 'on'}
+    com1.send(str(json.dumps(data)))
     led.toggle()
     sleep(1)
