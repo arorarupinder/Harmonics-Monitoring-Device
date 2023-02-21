@@ -99,9 +99,8 @@ save_to_csv(data1_list, "fft.csv")
 com1 = Easy_comms(0,9600)
 led = Pin(25, Pin.OUT)
 data = f1
-#data = [[1,2],[3,4],[5, 6]]
 while True:
-    com1.send(str(json.dumps(data)))
-    print(f'message: {data}')
+    #com1.send(str(json.dumps(data)))
+    com1.send(str(data))
     led.toggle()
     sleep(1)
