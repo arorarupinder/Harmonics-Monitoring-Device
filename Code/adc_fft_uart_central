@@ -54,23 +54,23 @@ def save_to_txt(f1, file_name):
 def read_txt(file_name):
     # Read the data from the text file
     with open(file_name, "r") as f:
-        data = f.read()
+        data1 = f.read()
 
     # Split the string into a list of strings
-    data = data.split()
+    data1 = data1.split()
 
     #Convert the strings to floats and print it 
-    data_list = []
-    for i in data:
-        data_list.append(float(i))
-    print(data_list)
+    data1_list = []
+    for i in data1:
+        data1_list.append(float(i))
+    print(data1_list)
 
-    return data_list
+    return data1_list
 
 
-def save_to_csv(data_list, file_name):
+def save_to_csv(data1_list, file_name):
     # Convert the float array to a list of strings
-    data_str = [str(x) for x in data_list]
+    data_str = [str(x) for x in data1_list]
 
     # Join the list of strings with commas
     csv_str = ",".join(data_str)
@@ -92,15 +92,16 @@ def save_to_csv(data_list, file_name):
 adc_values = read_adc()
 f1 = process_signal(adc_values)
 save_to_txt(f1, "fft.txt")
-data_list = read_txt("fft.txt")
-save_to_csv(data_list, "fft.csv")
+data1_list = read_txt("fft.txt")
+save_to_csv(data1_list, "fft.csv")
 
 #UART writes data to central
 com1 = Easy_comms(0,9600)
 led = Pin(25, Pin.OUT)
-#data = data_list
-data = [[1,2],[3,4],[5, 6]]
+data = f1
+#data = [[1,2],[3,4],[5, 6]]
 while True:
     com1.send(str(json.dumps(data)))
+    print(f'message: {data}')
     led.toggle()
     sleep(1)
