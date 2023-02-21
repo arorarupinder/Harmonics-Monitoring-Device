@@ -1,5 +1,4 @@
-# uart central & rotary_display integrated 
-
+# uart central & rotary_display integrated
 from easy_comms import Easy_comms
 from time import sleep
 from machine import Pin
@@ -15,7 +14,8 @@ led = Pin(25, Pin.OUT)
 while True:
     message = com1.read()
     if message is not None:
-        data = json.loads(message)
+        #data = json.loads(message)
+        data = message
         led.toggle()
         print(data)
     
