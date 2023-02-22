@@ -7,7 +7,7 @@ from time import sleep
 from machine import Pin
 import json
 
-#@micropython.native
+@micropython.native
 def read_adc():
     # initialize the ADC
     adc = machine.ADC(28)
