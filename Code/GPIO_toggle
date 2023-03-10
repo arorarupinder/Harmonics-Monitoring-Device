@@ -1,0 +1,14 @@
+from machine import Pin, ADC, Timer
+
+#adc = machine.ADC(28)
+#initialize oin
+pin = machine.Pin(28, machine.Pin.OUT)
+@micropython.native
+def toggle_adc_input(timer):
+    current_value = pin.value()
+    pin.value(not current_value)
+    
+    
+timer = Timer(-1)
+timer.init(freq=1200, mode=Timer.PERIODIC, callback=toggle_adc_input)
+
