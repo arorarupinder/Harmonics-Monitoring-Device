@@ -1,6 +1,8 @@
-#ADCtimer_best gain_FFT
+#ADCtimer_best gain_FFT : Phase1
+from easy_comms import Easy_comms
 from ulab import numpy as np
 import utime
+from machine import Pin
 from time import sleep
 from machine import Timer
 import sys
@@ -16,7 +18,7 @@ tim = Timer(-1)
 count = 0
 
 # Set the size of the array to store the ADC values
-ARRAY_SIZE = 1024
+ARRAY_SIZE = 512
 adc_values = np.zeros(ARRAY_SIZE, dtype=np.uint16)
 adc1_values = np.zeros(ARRAY_SIZE, dtype=np.uint16)
 adc2_values = np.zeros(ARRAY_SIZE, dtype=np.uint16)
@@ -39,7 +41,7 @@ def read_adc(timer):
     # Trigger the ADC conversion and read the value
     value = adc.read_u16()
     value1 = adc1.read_u16()
-    value2 = adc1.read_u16()
+    value2 = adc2.read_u16()
     
     # Store the value in the array
     adc_values[count-1] = value
@@ -47,15 +49,15 @@ def read_adc(timer):
     adc2_values[count-1] = value2
 
 # Set the timer to trigger the read_adc function every 1 second
-tim.init(freq=1560, mode=machine.Timer.PERIODIC, callback=read_adc)
+tim.init(freq=3072, mode=machine.Timer.PERIODIC, callback=read_adc)
 
 # Wait for the timer to finish
 while count < ARRAY_SIZE:
     pass
 
 print(adc_values)
-print(adc1_values)
-print(adc2_values)
+#print(adc1_values)
+#print(adc2_values)
 
 
 # Define a function to find the highest samples and count their occurrences
@@ -175,4 +177,16 @@ end_time = time()
 save_to_txt(f1, "fft.txt")
 data1_list = read_txt("fft.txt")
 save_to_csv(data1_list, "fft.csv")
+
+'''
+#UART writes data to central
+com1 = Easy_comms(0,9600)
+led = Pin(25, Pin.OUT)
+data1 = f1
+while True:
+    #com1.send(str(json.dumps(data)))
+    com1.send(str(data1))
+    led.toggle()
+    sleep(1)
+  '''  
 
