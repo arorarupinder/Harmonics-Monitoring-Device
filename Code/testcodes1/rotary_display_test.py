@@ -1,0 +1,183 @@
+
+from machine import Pin, I2C
+from os import listdir
+from ssd1306 import SSD1306_I2C
+from time import sleep
+from ulab import numpy as np
+#import ulab as np
+#from ulab import fft
+
+#from test1 import show_threshold
+
+# I2C variables
+i2c = I2C(id=0, scl=Pin(1), sda=Pin(0))
+
+# Screen Variables
+width = 128
+height = 64
+line = 1 
+highlight = 1
+shift = 0
+list_length = 0
+total_lines = 6
+
+# create the display
+#oled = SSD1306_I2C(width=width, height=height, i2c=i2c)
+
+oled = SSD1306_I2C(width=128, height=64, i2c=i2c)
+oled.init_display()
+
+# Setup the Rotary Encoder
+button_pin = Pin(16, Pin.IN, Pin.PULL_UP)
+direction_pin = Pin(17, Pin.IN, Pin.PULL_UP)
+step_pin  = Pin(18, Pin.IN, Pin.PULL_UP)
+
+# for tracking the direction and button state
+previous_value = True
+button_down = False
+
+
+#a=np.fft(5)
+#print("testing...", a)
+
+def get_file():
+    """FUNCTION DEFINED BUT NOT BEING UTILIZE"""
+    """ Get a specific Python file in the root folder of the Pico """
+    
+    files = listdir() #getting files in the directory
+      
+    test_file = [] #creating an empty array
+    for file in files: #each element in array files
+        if file.startswith("test1"): #checking if file ends w py
+            test_file.append(file) #if yes add file to menu array
+
+    return(test_file) #return menu containing values
+
+
+
+def show_menu(menu):
+    """ Shows the menu on the screen"""
+      
+    # bring in the global variables
+    global line, highlight, shift, list_length #no longer local variables but global
+
+    # menu variables
+    item = 1
+    line = 1
+    line_height = 10
+    
+    
+
+    # clear the display
+    oled.fill_rect(0,0,width,height,0) #highligting the display
+
+    #oled.text("Set threshold:", 0, 5)
+
+    # Shift the list of files so that it shows on the display
+    list_length = len(menu)
+    short_list = menu[shift:shift+total_lines]
+
+    for item in short_list:
+        if highlight == line:
+            oled.fill_rect(0,(line-1)*line_height, width,line_height,1)
+            oled.text(">",0, (line-1)*line_height,0)
+            oled.text(item, 10, (line-1)*line_height,0)
+            oled.show()
+        else:
+            oled.text(item, 10, (line-1)*line_height,1)
+            oled.show()
+        line += 1 
+    oled.show()
+
+
+def set_val(threshold):
+    
+    
+    
+    global options
+    # clear the screen
+    oled.fill_rect(0,0,width,height,0)
+    oled.text("Threshold set to", 1, 10)
+    oled.text(threshold,1, 20)
+    oled.show()
+    sleep(3)
+    
+    ##retrieved_file = get_file() #calling another function for getting test file in the directory
+    ##print(retrieved_file)
+    
+    #converting list to string
+    ##str_retrieved_file = "{}".format(retrieved_file[0])
+    ##print(str_retrieved_file)
+    
+    
+    #call function from test1 file and give it a value
+    #show_threshold(threshold)
+    ##exec(open(str_retrieved_file).read()) #have to get the file
+    
+    
+    show_menu(options)
+
+#def calculation_block(calc_val):
+    
+    
+
+
+
+
+
+
+options =[]
+i=0
+
+while i<30:
+    options.append(f"{i}A")
+    i+=1
+        
+print(options)
+show_menu(options) #showing list generated on display
+
+
+
+
+
+
+# Repeat forever
+while True:
+    if previous_value != step_pin.value():
+        if step_pin.value() == False:
+
+            # Turned Left 
+            if direction_pin.value() == False:
+                if highlight > 1:
+                    highlight -= 1  
+                else:
+                    if shift > 0:
+                        shift -= 1  
+
+            # Turned Right
+            else:
+                if highlight < total_lines:
+                    highlight += 1
+                else: 
+                    if shift+total_lines < list_length:
+                        shift += 1
+
+        
+        show_menu(options)
+        previous_value = step_pin.value()   
+        
+    # Check for button pressed
+    if button_pin.value() == False and not button_down:
+        button_down = True
+        
+        print("Threshold set")
+        
+        set_val(options[(highlight-1) + shift]) #highlight and shift is a global variable
+        print("chosen val...", options[(highlight-1) + shift])
+        
+        #threshold_val= options[(highlight-1) + shift]
+        #calculation_block(threshold_val) #calling the calculation function 
+
+    # Decbounce button
+    if button_pin.value() == True and button_down:
+        button_down = False
