@@ -48,8 +48,8 @@ com2 = Easy_comms(1,9600)
 led = Pin(25, Pin.OUT)
 counter = 0
 
-def i_fund_val(i1):
-    return i1
+#def i_fund_val(i1):
+#    return i1
 
 def thd_fft_calc(received_data):
     # find highest value in 0-18
@@ -66,8 +66,8 @@ def thd_fft_calc(received_data):
     
     #function for storing i fund value
     #call function for storing i_fund
-    i_fund_val(i_fund)
-    print("this is the fundamental val getting passed1", i_fund)
+    #i_fund_val(i_fund)
+    #print("this is the fundamental val getting passed1", i_fund)
 
     print("Phase A THD: ", thd_fft, "%")
     return thd_fft
@@ -253,10 +253,10 @@ def set_val(threshold):
     
 def thd_thresh_calc(i_thresh):
     #assuming
-    i_fund1 = i_fund_val(i1)
+#     i_fund1 = i_fund_val(i1)
     
-    print("this is the fundamental val getting passed2", i_fund1)
-    
+#     print("this is the fundamental val getting passed2", i_fund1)
+    i_fund1=60
 
     #converting string to int
     i_thresh_search = re.search(r"\d+(\.\d+)?", i_thresh)
