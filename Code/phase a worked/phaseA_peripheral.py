@@ -8,9 +8,10 @@ from machine import Timer
 import sys
 import math
 import struct
+from ulab import utils as utils
 
 # Initialize the ADC and timer
-adc = machine.ADC(28)
+adc = machine.ADC(27)
 #adc1 = machine.ADC(27)
 #adc2 = machine.ADC(26)
 tim = Timer(-1)
@@ -59,7 +60,7 @@ while count < ARRAY_SIZE:
     pass
 
 
-print(adc_values)
+#print(adc_values)
 #print(adc1_values)
 #print(adc2_values)
 
@@ -122,11 +123,12 @@ def process_signal(adc_values):
     #perform fft
     a, b = np.fft.fft(y_windowed, z)
     #absolute value of the array
-    f1 = abs(a) + abs(b)
-    #take absolute value for only the first half of the array
-    #f = abs(a[:len(a)//2]) + abs(b[:len(b)//2])     
-    f1[f1<3.5] = 0
-    non_zero_indices = f1 != 0
+    f2 = abs(a) + abs(b)
+    # break array in half and store the second half in a separate variable
+    f1 = f2[len(f2)//2:]    
+    #aa = utils.spectrogram(f1)
+    #print(aa)
+   
     return f1
 
 def time():    
@@ -135,6 +137,28 @@ def time():
     end_time = utime.ticks_us() - start_time
     print("FFT duration (us):", end_time)
     return end_time
+'''
+def save_to_txt(adc_values, file_name):
+    #print the array without truncating
+    np.set_printoptions(threshold=sys.maxsize)
+    print(adc_values)
+    
+    #create a file called "fft.text" and write elements of array to it, each on a new line
+    with open(file_name, "w", encoding="utf-8") as f:
+        for i in adc_values:        
+           f.write(str(i) + '\n')
+
+
+def save_to_txt(aa, file_name):
+    #print the array without truncating
+    np.set_printoptions(threshold=sys.maxsize)
+    print(aa)
+    
+    #create a file called "fft.text" and write elements of array to it, each on a new line
+    with open(file_name, "w", encoding="utf-8") as f:
+        for i in aa:        
+           f.write(str(i) + '\n')
+'''
 
 def save_to_txt(f1, file_name):
     #print the array without truncating
@@ -145,7 +169,7 @@ def save_to_txt(f1, file_name):
     with open(file_name, "w", encoding="utf-8") as f:
         for i in f1:        
            f.write(str(i) + '\n')
-           
+      
 def read_txt(file_name):
     # Read the data from the text file
     with open(file_name, "r") as f:
