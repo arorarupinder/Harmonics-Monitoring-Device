@@ -253,7 +253,7 @@ def set_val(threshold):
     
 def thd_thresh_calc(i_thresh):
     #assuming
-    i_fund1 = i_fund_val():
+    i_fund1 = i_fund_val(i1)
     
     print("this is the fundamental val getting passed2", i_fund1)
     
