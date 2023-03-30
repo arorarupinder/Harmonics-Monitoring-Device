@@ -65,7 +65,7 @@ def thd_fft_calc(received_data):
     i7 = max(received_data[54:64])
 
     # calculate THD from FFT input
-    thd_fft = np.sqrt((i3**2) + (i5**2) + (i7**2)) / (i_fund**2)
+    thd_fft = np.sqrt((i3**2) + (i5**2) + (i7**2)) / (i_fund)
     
     #function for storing i fund value
     #call function for storing i_fund
@@ -82,7 +82,7 @@ data2_received = False
 
 while True:
     '''
-    # read from com1
+    # read from com0
     if not data4_received:
         slave_id, received_data = com1.read()
         if received_data is not None and slave_id == 1:
@@ -98,7 +98,7 @@ while True:
             counter += 1
             data4_received = True  # Set the flag
 '''            
-    # read from com2
+    # read from com1
     if not data2_received:
         slave_id, received_data = com2.read()
         if received_data is not None and slave_id == 2:
@@ -255,7 +255,9 @@ def set_val(threshold):
     
     
 def thd_thresh_calc(i_thresh):
-   
+    #assuming
+    
+    
     
     # call thd_fft_calc() function here
     thd_fft = thd_fft_calc(received_data)
@@ -270,7 +272,7 @@ def thd_thresh_calc(i_thresh):
     
 
     #calculating thd from client input
-    thd_thresh_client = np.sqrt(int(i_thresh_val) ** 2)/(i_fund**2)
+    thd_thresh_client = np.sqrt(int(i_thresh_val) ** 2)/(i_fund)
     print("This is the calculated thd from client in", thd_thresh_client)
     return thd_thresh_client
 
