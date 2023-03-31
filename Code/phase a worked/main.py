@@ -1,4 +1,3 @@
-
 # uart central & rotary_display integrated
 from easy_comms import Easy_comms
 from ulab import numpy as np
@@ -81,114 +80,49 @@ data4_received = False
 data2_received = False
 
 while True:
-    '''
     # read from com0
     if not data4_received:
         slave_id, received_data = com1.read()
         if received_data is not None and slave_id == 1:
-            print("adctimer3 data:", end=" ")
-            for value in received_data:
-                print(value, end=" ")
+            print("Phase B:", end=" ")
+            for i in range(min(len(received_data), 128)):
+                print(received_data[i], end=" ")
             print()  # print a newline character to separate the output for each received message
-            # toggle led for 5sec      
+            # toggle led for 5sec
             led.value(1)
             sleep(5)
             led.value(0)
             sleep(5)
-            counter += 1
             data4_received = True  # Set the flag
-'''            
+
+        
+         
     # read from com1
     if not data2_received:
         slave_id, received_data = com2.read()
         if received_data is not None and slave_id == 2:
-            print("adctimer2 data:", end=" ")
-            for value in received_data:
-                print(value, end=" ")
+            print("Phase A:", end=" ")
+            for i in range(min(len(received_data), 128)):
+                print(received_data[i], end=" ")
             print()  # print a newline character to separate the output for each received message
             # toggle led for 5sec      
             led.value(1)
             sleep(5)
             led.value(0)
             sleep(5)
-            counter += 1
+            
             data2_received = True  # Set the flag
             
             # call thd_fft_calc() function here
-            thd_fft = thd_fft_calc(received_data)
+            #thd_fft = thd_fft_calc(received_data)
             
             #print("Phase A THD :", thd_fft, "%")
             
 
             
-    if data2_received:       
-    #if data4_received and data2_received:
+    #if data2_received:       
+    if data4_received and data2_received:
         break  # Exit the loop if both messages have been received
-
-'''
-# flags to keep track of whether data has been received
-#data5_received = False
-data4_received = False
-data2_received = False
-received_data = []  # define received_data before the slave_id if blocks
-while True:
-    # read from com1
-    if not data4_received:
-        data4 = com1.read()
-        #print("data4:", data4) 
-        if data4 is not None:
-            #print("data4:",data4)
-            slave_id, received_data = data4
-            #print("received_data1:",received_data)
-            if slave_id == 1:
-                data4_received = True             
-               # print("received_data1:",received_data)
-            
-    if data4_received:
-        
-        print("adctimer3 data:", end=" ")
-        for value in received_data:
-            print(value, end=" ")
-        print()  # print a newline character to separate the output for each received message
-        # toggle led for 5sec      
-        led.value(1)
-        sleep(5)
-        led.value(0)
-        sleep(5)
-        counter += 1
-        data4_received = False  # Reset the flag
-        
-    # read from com2
-    if not data2_received:
-        data2 = com2.read()
-        if data2 is not None:
-            slave_id, received_data = data2
-            if slave_id == 2:
-                data2_received = True
-                
-    
-
-    if data2_received: 
-        print("adctimer2 data:", end=" ")
-        for value in received_data:
-            print(value, end=" ")
-        print()  # print a newline character to separate the output for each received message
-        # toggle led for 5sec      
-        led.value(1)
-        sleep(5)
-        led.value(0)
-        sleep(5)
-        counter += 1
-        data2_received = False  # Reset the flag
-        
-        # call thd_fft_calc() function here
-        thd_fft = thd_fft_calc(received_data)
-        print("Phase A THD :", thd_fft, "%")
-
-    if counter >= 1:
-        break
-   
-'''
 
 
 def get_file():
@@ -255,10 +189,7 @@ def set_val(threshold):
     
     
 def thd_thresh_calc(i_thresh):
-    #assuming
-    
-    
-    
+
     # call thd_fft_calc() function here
     thd_fft = thd_fft_calc(received_data)
 
@@ -384,3 +315,5 @@ while True:
         oled.text("Phase A THD", 1, 10)
         oled.text(show_thd_val_str,1, 20)
         oled.show()
+        
+
