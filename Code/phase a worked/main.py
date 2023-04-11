@@ -188,7 +188,7 @@ def set_val(threshold):
     show_menu(options)
     
     
-def thd_thresh_calc(i_thresh):
+def thd_thresh_calc(i_thresh): 
 
     # call thd_fft_calc() function here
     thd_fft = thd_fft_calc(received_data)
@@ -301,7 +301,7 @@ while True:
     t_diff = t_incr - t_button
     
     
-    if t_diff >= 2000:
+    if t_diff >= 2000: #show signal thd on screen if there's no rotary activity
         
         # Reset t_button timer
         t_button = time.ticks_ms()
