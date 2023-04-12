@@ -176,7 +176,7 @@ def show_menu(menu):
     
     
     
-def set_val(threshold):
+def set_val(threshold): #displays selected threshold on screen
     
     global options
     # clear the screen
