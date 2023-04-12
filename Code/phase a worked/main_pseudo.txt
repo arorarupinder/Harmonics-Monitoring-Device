@@ -1,0 +1,90 @@
+*****************************
+Authors: Ivy Nimer, Rupinder Arora
+
+Code Objective: 
+->Woking with Phase A input 
+->Main controller receives FFT data from Phase A peripheral pico. The Main controller calculates the THD from incoming 
+-> The Main controllers receives current threshold from current via oled screen and rotary encoder (user interface). Main controller calculates the THD from client input.
+-> signal THD is compared with user-threshold THD. 
+-> LED turns on if signal THD> threshold THD
+     LED remains off if signal THD> <threshold THD
+
+*************************************************
+
+Calling libraries
+
+Initializing OLED pins
+Initializing OLED screen variables
+
+Initializing encoder pins
+
+Initializing led (alarm) pin
+
+Initialize tracker for rotary encoder direction for determine encoder state
+
+Initializing pins for reading the FFT data from Phase A peripheral pico via UART
+
+i_fund_val: is a function for storing the fundamental current value received from peripheral pico
+
+thd_fft_calc : 
+->receives data via UART 
+->calculates THD from FFT input and store in thd_fft variable
+-> calls i_fund_val  function for strong fundamental value
+-> prints phase A THD value on display
+-> returns thd_fft 
+
+Set flags for tracking if FFT data is received by main controller from peripheral pico
+
+Start while loop: 
+->when Phase A FFT data is received toggle led, print received data, set flag to true 
+->when Phase B FFT data is received toggle led, print received data, set flag to true 
+->When both Phase A FFT data and Phase B FFT data are received then exit while loop
+
+get_file:
+->get files in pico directory
+-> check directory if folder name starts with “test1” then retrieve
+->open, read, print retrieved file 
+-> return retrieved file
+
+show_menu:
+->this function shows menu option on screen
+->set screen variables
+>shift list of options on screen 
+->highlight and point at a value on screen
+->show menu
+
+set_val:
+-> displays selected threshold
+
+thd_thresh_calc:
+-> calling hd_fft_calc
+-> prints fundamental value to see if received 
+-> convert string to integer (ie. client input is 3A then convert 3A (string) to 3 (int)
+->calculate thd from client input and store variable to thd_thresh_client
+-> return thd_thresh_client
+
+compare_thd:
+-> call thd_fft_calc and store return value to thd_fft
+-> if thd_fft > thd_thresh
+     print("Incoming thd greater than threshold")
+     Turn on LED
+-> else 
+     print("Current below threshold")
+     Turn off LED
+
+While loop to generate 0-100 for current threshold options  then print options on display 
+
+Save time to t_button
+
+While loop (repeats)
+->Turning left, right on encoder
+-> when button pushed 
+     Set threshold 
+     Call thd_thresh_calc and store value to thd_thresh
+     Call compare_thd
+     Save time to t_button
+     Debounce button
+
+Check t_button timer
+
+Show signal thd on display if no rotary activity 
