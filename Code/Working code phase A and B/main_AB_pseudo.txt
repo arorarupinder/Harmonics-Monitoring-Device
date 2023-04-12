@@ -1,0 +1,103 @@
+*****************************
+Authors: Ivy Nimer, Rupinder Arora
+
+Code Objective: 
+->Woking with Phase A and Phase B input 
+->Main controller receives FFT data from Phase A and Phase B peripheral pico. The Main controller calculates the THD from incoming signal from both phases
+-> The Main controllers receives current threshold from client via oled screen and rotary encoder (user interface). Main controller calculates the THD from client input. Note that fundamental current used is the average of both phases 
+-> signal THD is compared with user-threshold THD. 
+-> LED turns on if signal THD> threshold THD
+     LED remains off if signal THD <threshold THD
+Note: Phase A and Phase B input signal are relatively close
+
+*************************************************
+
+Calling libraries
+
+Initializing OLED pins
+Initializing OLED screen variables
+
+Initializing encoder pins
+
+Initializing led (alarm) pin
+
+Initialize tracker for rotary encoder direction for determine encoder state
+
+Initializing pins for reading the FFT data for Phase A and Phase B peripheral pico via UART 
+
+i_fund_val_A: is a function for storing the fundamental current value received from peripheral pico A
+
+i_fund_val_B: is a function for storing the fundamental current value received from peripheral pico B
+
+thd_fft_calc_A : 
+->receives data via UART from Phase A peripheral pico
+->calculates THD from FFT input and store in thd_fft_A variable
+-> calls i_fund_val_A  function for strong fundamental value
+-> prints phase A THD value on display
+-> returns thd_fft_A 
+
+thd_fft_calc_B : 
+->receives data via UART from Phase B peripheral pico
+->calculates THD from FFT input and store in thd_fft_B variable
+-> calls i_fund_val_B  function for strong fundamental value
+-> prints phase B THD value on display
+-> returns thd_fft_B 
+
+Set flags for tracking if FFT data is received by main controller from peripheral pico (Phase A and B)
+
+Start while loop: 
+->when Phase A FFT data is received toggle led, print received data, set flag to true 
+->when Phase B FFT data is received toggle led, print received data, set flag to true 
+->When both Phase A FFT data and Phase B FFT data are received then exit while loop
+
+get_file: (note that this function is not being utilized)
+->get files in pico directory
+-> check directory if folder name starts with “test1” then retrieve
+->open, read, print retrieved file 
+-> return retrieved file
+
+show_menu:
+->this function shows menu option on screen
+->set screen variables
+>shift list of options on screen 
+->highlight and point at a value on screen
+->show menu
+
+set_val:
+-> displays selected threshold
+
+thd_thresh_calc:
+-> calling thd_fft_calc
+-> prints fundamental value from Phase A to see if received 
+-> prints fundamental value from Phase B to see if received 
+-> convert string to integer (ie. client input is 3A then convert 3A (string) to 3 (int)
+-> calculate average fundamental current from from both Phases
+->calculate thd from client input and store variable to thd_thresh_client
+-> return thd_thresh_client
+
+compare_thd:
+-> call thd_fft_calc_A and store return value to thd_fft_A
+-> call thd_fft_calc_B and store return value to thd_fft_B
+-> if thd_fft_A and  thd_fft_B> thd_thresh
+     print("Incoming thd greater than threshold")
+     Turn on LED
+-> else 
+     print("Current below threshold")
+     Turn off LED
+
+While loop to generate 0-100 for current threshold options  then print options on display 
+
+Save time to t_button
+
+While loop (repeats)
+->Turning left, right on encoder
+-> when button pushed 
+     Set threshold 
+     Call thd_thresh_calc and store value to thd_thresh
+     Call compare_thd
+     Save time to t_button
+     Debounce button
+
+Check t_button timer
+
+Show signal thd for Phase A and Phase B on display if no rotary activity 
